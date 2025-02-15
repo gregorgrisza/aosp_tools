@@ -18,14 +18,20 @@
 # A simple GUI to remotely actuate the Vehicle HAL via the eumalator
 
 import argparse
+import os, os.path
 import sys
 from threading import Thread
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 
-import VehicleHalProto_pb2
-from vhal_emulator import Vhal
-import vhal_consts_2_0 as c
+aosp_root = "/Users/grzegorz.michalak/repos/android-emu-master-dev"
+
+tools_location = os.path.join(aosp_root, "packages/services/Car/tools")
+sys.path.append(tools_location) # we need HIDL parser
+
+from emulator import VehicleHalProto_pb2
+from emulator.vhal_emulator import Vhal
+from emulator import vhal_consts_2_0 as c
 
 
 # Define a simple thread that receives messages from a vhal object (v) and prints them
