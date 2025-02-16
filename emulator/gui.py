@@ -24,9 +24,13 @@ from threading import Thread
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 
-aosp_root = "/Users/grzegorz.michalak/repos/android-emu-master-dev"
+android_build_top = os.environ.get("ANDROID_BUILD_TOP", None)
+if android_build_top is None:
+    android_build_top = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+        '..','..','..','..'
+    ))
 
-tools_location = os.path.join(aosp_root, "packages/services/Car/tools")
+tools_location = os.path.join(android_build_top, "packages/services/Car/tools")
 sys.path.append(tools_location) # we need HIDL parser
 
 from emulator import VehicleHalProto_pb2

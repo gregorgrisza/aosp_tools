@@ -15,6 +15,7 @@
 # limitations under the License.
 #
 
+# TODO: gm: correct description
 # This script generates vhal_consts_x_y.py files for use in vhal_emulator
 # They are generated from corresponding data in Vehicle HAL types.hal files
 # To run, invoke at a shell by saying:
@@ -63,10 +64,17 @@ import sys
 
 
 script_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)))
-aosp_root = "/Users/grzegorz.michalak/repos/android-emu-master-dev"
-# parent_location = os.path.abspath(os.path.join(script_directory, '..'))
-default_vhal_location = os.path.join(aosp_root, "hardware/interfaces/automotive/vehicle")
-tools_location = os.path.join(aosp_root, "packages/services/Car/tools")
+
+# assumed that tools is already part of AOSP project structure, so current directory is in:
+#  <ANDROID_BUILD_TOP>/vendor/<vendor>/tools/emulator
+android_build_top = os.environ.get("ANDROID_BUILD_TOP", None)
+if android_build_top is None:
+    android_build_top = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+        '..','..','..','..'
+    ))
+
+default_vhal_location = os.path.join(android_build_top, "hardware/interfaces/automotive/vehicle")
+tools_location = os.path.join(android_build_top, "packages/services/Car/tools")
 sys.path.append(tools_location) # we need HIDL parser
 
 # hidl_parser depends on a custom Python package that requires installation
@@ -93,7 +101,7 @@ if android_build_top is not None:
     vhal_location = os.path.join(android_build_top, 'hardware','interfaces','automotive','vehicle')
 else:
     vhal_location = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-        '/Users/grzegorz.michalak/repos/aosp_mycar/vendor/v','hardware','interfaces','automotive','vehicle'
+        '..','..','..','..', 'vendor','v','hardware','interfaces','automotive','vehicle'
     ))
 if not(os.path.exists(vhal_location) and os.path.isdir(vhal_location)):
     print("Vehicle HAL was not found at %s. lunch may provide a correct environment, or files moved" % vhal_location)
