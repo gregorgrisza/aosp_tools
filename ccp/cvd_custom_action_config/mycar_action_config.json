@@ -8,7 +8,7 @@
 		}
 	},
 	{
-		"server":"cuttlefish_example_action_server",
+		"server":"cuttlefish_mycar_action_server",
 		"buttons":[
 			{
 				"command":"settings",
