@@ -41,3 +41,11 @@ prebuilt_etc_host {
     src: "mycar_action_config.json",
     sub_dir: "cvd_custom_action_config",
 }
+
+// prebuilt_usr_share_host {
+//     name: "mycar_custom_style.css",
+//     src: "mycar_custom_style.css",
+//     // the following values must be set to exactly this
+//     filename: "mycar.css",
+//     sub_dir: "webrtc/assets",
+// }
