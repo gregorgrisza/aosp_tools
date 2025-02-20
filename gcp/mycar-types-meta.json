@@ -1,0 +1,34 @@
+[
+    {
+        "name": "VehicleProperty",
+        "values": [
+            {
+                "name": "VENDOR_INTERIOR_LIGHTNING",
+                "value": 557899439,
+                "data_enum": "VendorInteriorLightning"
+            }
+        ]
+    },
+    {
+        "name": "VendorInteriorLightning",
+        "values": [
+            {
+                "name": "UNKNOWN",
+                "value": 0
+            },
+            {
+                "name": "THEME_BLUE",
+                "value": 1
+            },
+            {
+                "name": "THEME_GREEN",
+                "value": 2
+            },
+            {
+                "name": "THEME_YELLOW",
+                "value": 3
+            }
+        ]
+    }
+
+]
