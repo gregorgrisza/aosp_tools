@@ -56,7 +56,7 @@ def window():
     app = QtWidgets.QApplication(sys.argv)
     dialog = QtWidgets.QDialog()
     dialog.setWindowTitle('VHal Driver')
-    dialog.setGeometry(100, 100, 200, 50)
+    dialog.setGeometry(100, 100, 600, 200)
     topLevelLayout = QtWidgets.QHBoxLayout()
     dialog.setLayout(topLevelLayout)
 
@@ -105,12 +105,44 @@ def window():
     buttonLayout.addWidget(bRight)
     signalButtonGroup.addButton(bRight)
 
-    signalButtonGroup.buttonClicked.connect(lambda: onSignalClicked(signalButtonGroup))
+    signalButtonGroup.buttonClicked.connect(lambda: onSignalClicked)
+
+    vLayout = QtWidgets.QVBoxLayout()
+    topLevelLayout.addLayout(vLayout)
+
+    vTitle = QtWidgets.QLabel(dialog)
+    vTitle.setText('Interior Lightning')
+    vLayout.addWidget(vTitle)
+
+    # UNKNOWN = 0,
+    # THEME_BLUE = 1,
+    # THEME_GREEN = 2,
+    # THEME_YELLOW = 3,
+
+    combobox1 = QtWidgets.QComboBox()
+    combobox1.addItem('Unknown')
+    combobox1.addItem('Blue')
+    combobox1.addItem('Green')
+    combobox1.addItem('Yellow')
+    combobox1.currentIndexChanged.connect(lambda: onThemeChanged)
+    vLayout.addWidget(combobox1)
 
     dialog.show()
     sys.exit(app.exec_())
 
 
+def onThemeChanged(combobox):
+
+    vals = {
+        0 : c.VENDORINTERIORLIGHTNING_UNKNOWN,
+        1 : c.VENDORINTERIORLIGHTNING_THEME_BLUE,
+        2 : c.VENDORINTERIORLIGHTNING_THEME_GREEN,
+        3 : c.VENDORINTERIORLIGHTNING_THEME_YELLOW,
+    }
+
+    vhal.setProperty(c.VEHICLEPROPERTY_VENDOR_INTERIOR_LIGHTNING, vals[combobox.currentIndex()])
+    print("Index changed")
+    
 def onSignalClicked(group):
     print('signal ' + group.checkedButton().text() + ' is active')
     try:
