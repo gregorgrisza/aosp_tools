@@ -120,11 +120,12 @@ def window():
     # THEME_YELLOW = 3,
 
     combobox1 = QtWidgets.QComboBox()
+    combobox1.addItem('-')
     combobox1.addItem('Unknown')
     combobox1.addItem('Blue')
     combobox1.addItem('Green')
     combobox1.addItem('Yellow')
-    combobox1.currentIndexChanged.connect(lambda: onThemeChanged)
+    combobox1.currentIndexChanged.connect(lambda: onThemeChanged(combobox1))
     vLayout.addWidget(combobox1)
 
     dialog.show()
@@ -134,13 +135,16 @@ def window():
 def onThemeChanged(combobox):
 
     vals = {
-        0 : c.VENDORINTERIORLIGHTNING_UNKNOWN,
-        1 : c.VENDORINTERIORLIGHTNING_THEME_BLUE,
-        2 : c.VENDORINTERIORLIGHTNING_THEME_GREEN,
-        3 : c.VENDORINTERIORLIGHTNING_THEME_YELLOW,
+        0 : -1,
+        1 : c.VENDORINTERIORLIGHTNING_UNKNOWN,
+        2 : c.VENDORINTERIORLIGHTNING_THEME_BLUE,
+        3 : c.VENDORINTERIORLIGHTNING_THEME_GREEN,
+        4 : c.VENDORINTERIORLIGHTNING_THEME_YELLOW,
     }
 
-    vhal.setProperty(c.VEHICLEPROPERTY_VENDOR_INTERIOR_LIGHTNING, vals[combobox.currentIndex()])
+    k = combobox.currentIndex()
+    if ( k >= 0):
+        vhal.setProperty(c.VEHICLEPROPERTY_VENDOR_INTERIOR_LIGHTNING, vals.get(k))
     print("Index changed")
     
 def onSignalClicked(group):
