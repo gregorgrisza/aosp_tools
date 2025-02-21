@@ -98,7 +98,7 @@ except ImportError as e:
 
 android_build_top = os.environ.get("ANDROID_BUILD_TOP", None)
 if android_build_top is not None:
-    vhal_location = os.path.join(android_build_top, 'hardware','interfaces','automotive','vehicle')
+    vhal_location = os.path.join(android_build_top, 'vendor','v','hardware','interfaces','automotive','vehicle')
 else:
     vhal_location = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
         '..','..','..','..', 'vendor','v','hardware','interfaces','automotive','vehicle'

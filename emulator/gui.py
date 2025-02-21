@@ -128,6 +128,17 @@ def window():
     combobox1.currentIndexChanged.connect(lambda: onThemeChanged(combobox1))
     vLayout.addWidget(combobox1)
 
+
+    vTitle = QtWidgets.QLabel(dialog)
+    vTitle.setText('Interior Lightning')
+    vLayout.addWidget(vTitle)
+    tempBox = QtWidgets.QComboBox()
+    for i in range(16 * 2, 27 * 2):
+        print(i / 2)
+        tempBox.addItem(str(i / 2))
+    tempBox.currentIndexChanged.connect(lambda: onTempChanged(tempBox))
+    vLayout.addWidget(tempBox)
+
     dialog.show()
     sys.exit(app.exec_())
 
@@ -146,7 +157,11 @@ def onThemeChanged(combobox):
     if ( k >= 0):
         vhal.setProperty(c.VEHICLEPROPERTY_VENDOR_INTERIOR_LIGHTNING, vals.get(k))
     print("Index changed")
-    
+
+def onTempChanged(combobox):
+    vhal.setProperty(c.VEHICLEPROPERTY_HVAC_TEMPERATURE_SET, c.VEHICLEAREASEAT_ROW_1_LEFT, float(combobox.currentText()))
+    print("Temperature changed: ", combobox.currentText())
+
 def onSignalClicked(group):
     print('signal ' + group.checkedButton().text() + ' is active')
     try:
