@@ -33,30 +33,26 @@ int main(int argc, char** argv) {
 
   // Connect to WebRTC
   int fd = std::atoi(argv[1]);
-  LOG(INFO) << "Connecting to WebRTC server...";
+  LOG(INFO) << "CCP_SERVER: Connecting to WebRTC server...";
   SharedFD webrtc_socket = SharedFD::Dup(fd);
   close(fd);
   if (webrtc_socket->IsOpen()) {
-    LOG(INFO) << "Connected";
+    LOG(INFO) << "CCP_SERVER: Connected";
   } else {
-    LOG(ERROR) << "Could not connect, exiting...";
+    LOG(ERROR) << "CCP_SERVER: Could not connect, exiting...";
     return 1;
   }
-
-  // Track state for our two commands.
-  bool statusbar_expanded = false;
-  bool dnd_on = false;
 
   char buf[MESSAGE_SIZE];
   while (1) {
     // Read the command message from the socket.
     if (!webrtc_socket->IsOpen()) {
-      LOG(WARNING) << "WebRTC was closed.";
+      LOG(WARNING) << "CCP_SERVER: WebRTC was closed.";
       break;
     }
     if (cuttlefish::ReadExact(webrtc_socket, buf, MESSAGE_SIZE) !=
         MESSAGE_SIZE) {
-      LOG(WARNING) << "Failed to read the correct number of bytes.";
+      LOG(WARNING) << "CCP_SERVER: Failed to read the correct number of bytes.";
       break;
     }
     auto split = android::base::Split(buf, ":");
@@ -70,23 +66,19 @@ int main(int argc, char** argv) {
 
     // Demonstrate two commands. For demonstration purposes these two
     // commands use adb shell, but commands can execute any action you choose.
-    std::string adb_shell_command =
-        cuttlefish::HostBinaryPath("adb");
+    std::string adb_shell_command = "adb";
+        // cuttlefish::HostBinaryPath("adb");
     if (command == "settings") {
-      adb_shell_command += " shell cmd statusbar ";
-      adb_shell_command += statusbar_expanded ? "collapse" : "expand-settings";
-      statusbar_expanded = !statusbar_expanded;
+      adb_shell_command += " shell am start -a android.intent.action.VIEW -d https://www.dw.de ";
     } else if (command == "alert") {
-      adb_shell_command += " shell cmd notification set_dnd ";
-      adb_shell_command += dnd_on ? "off" : "on";
-      dnd_on = !dnd_on;
+      adb_shell_command += " shell dumpsys car_service inject-vhal-event 0x15600503 0x1 19.0";
     } else {
-      LOG(WARNING) << "Unexpected command: " << buf;
+      LOG(WARNING) << "CCP_SERVER: Unexpected command: " << buf;
     }
 
     if (!adb_shell_command.empty()) {
       if (system(adb_shell_command.c_str()) != 0) {
-        LOG(ERROR) << "Failed to run command: " << adb_shell_command;
+        LOG(ERROR) << "CCP_SERVER: Failed to run command: " << adb_shell_command;
       }
     }
   }
